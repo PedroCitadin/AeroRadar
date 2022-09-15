@@ -1,6 +1,8 @@
 
 package model.view;
 
+import model.util.DGTabelModel;
+
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -44,8 +46,48 @@ public class TelaPrincipal extends JFrame{
     private JButton btnInserir;
 
 
+    ///// Funções de transformação
+    private JTextField txtFT1X;
+    private JTextField txtFT1Y;
+    private JLabel lblFT1X;
+    private JLabel lblFT1Y;
+    private JButton btnFT1Transformar;
+
+    private JTextField txtFT2X;
+    private JTextField txtFT2Y;
+    private JLabel lblFT2X;
+    private JLabel lblFT2Y;
+    private JButton btnFT2Transformar;
+
+    private JTextField txtFT3X;
+    private JTextField txtFT3Y;
+    private JLabel lblFT3X;
+    private JLabel lblFT3Y;
+    private JTextField txtFT3Angulo;
+    private JLabel lblFT3Angulo;
+    private JLabel lblFT3CR;
+    private JButton btnFT3Transformar;
 
 
+    /////Funções de Rastreamento
+    private JLabel lblFR1DM;
+    private JTextField txtFR1DM;
+    private JButton btnFR1Rastrear;
+
+
+    private JLabel lblFR2DM;
+    private JTextField txtFR2DM;
+    private JButton btnFR2Rastrear;
+
+
+    private JLabel lblFR3TM;
+    private JTextField txtFR3TM;
+    private JButton btnFR3Rastrear;
+
+
+    /////////Datagrid
+    private JScrollPane sPaneDG;
+    private JTable tabelaDG;
 
 
     public TelaPrincipal(){
@@ -159,16 +201,130 @@ public class TelaPrincipal extends JFrame{
         pnlFuncTrans1 = new JPanel();
         pnlFuncTrans1.setBounds(26, 329, 142,115);
         pnlFuncTrans1.setBorder(borda);
+
+        lblFT1X = new JLabel();
+        lblFT1X.setText("X:");
+        lblFT1X.setFont(fonte_secundaria);
+        lblFT1X.setBounds(29, 357, 19, 14);
+        getContentPane().add(lblFT1X);
+
+        txtFT1X = new JTextField();
+        txtFT1X.setBounds(48, 350, 45, 29);
+        getContentPane().add(txtFT1X);
+
+        lblFT1Y = new JLabel();
+        lblFT1Y.setText("Y:");
+        lblFT1Y.setFont(fonte_secundaria);
+        lblFT1Y.setBounds(96, 357, 19, 14);
+        getContentPane().add(lblFT1Y);
+
+        txtFT1Y = new JTextField();
+        txtFT1Y.setBounds(115, 350, 45, 29);
+        getContentPane().add(txtFT1Y);
+
+        btnFT1Transformar = new JButton();
+        btnFT1Transformar.setText("Transformar");
+        btnFT1Transformar.setBackground(Color.CYAN);
+        btnFT1Transformar.setBounds(38,397,124,41);
+        getContentPane().add(btnFT1Transformar);
+
+
+
+
         getContentPane().add(pnlFuncTrans1);
 
         pnlFuncTrans2 = new JPanel();
         pnlFuncTrans2.setBounds(183, 329, 142,115);
         pnlFuncTrans2.setBorder(borda);
+
+
+        lblFT2X = new JLabel();
+        lblFT2X.setText("X:");
+        lblFT2X.setFont(fonte_secundaria);
+        lblFT2X.setBounds(186, 357, 19, 14);
+        getContentPane().add(lblFT2X);
+
+        txtFT2X = new JTextField();
+        txtFT2X.setBounds(205, 350, 45, 29);
+        getContentPane().add(txtFT2X);
+
+        lblFT2Y = new JLabel();
+        lblFT2Y.setText("Y:");
+        lblFT2Y.setFont(fonte_secundaria);
+        lblFT2Y.setBounds(253, 357, 19, 14);
+        getContentPane().add(lblFT2Y);
+
+        txtFT2Y = new JTextField();
+        txtFT2Y.setBounds(272, 350, 45, 29);
+        getContentPane().add(txtFT2Y);
+
+        btnFT2Transformar = new JButton();
+        btnFT2Transformar.setText("Transformar");
+        btnFT2Transformar.setBackground(Color.CYAN);
+        btnFT2Transformar.setBounds(195,397,124,41);
+        getContentPane().add(btnFT2Transformar);
+
+
+
+
+
+
+
+
+
         getContentPane().add(pnlFuncTrans2);
 
         pnlFuncTrans3 = new JPanel();
         pnlFuncTrans3.setBounds(26, 471, 300,115);
         pnlFuncTrans3.setBorder(borda);
+
+
+        lblFT3X = new JLabel();
+        lblFT3X.setText("X:");
+        lblFT3X.setFont(fonte_secundaria);
+        lblFT3X.setBounds(169, 546, 19, 14);
+        getContentPane().add(lblFT3X);
+
+        txtFT3X = new JTextField();
+        txtFT3X.setBounds(188, 539, 45, 29);
+        getContentPane().add(txtFT3X);
+
+        lblFT3Y = new JLabel();
+        lblFT3Y.setText("Y:");
+        lblFT3Y.setFont(fonte_secundaria);
+        lblFT3Y.setBounds(236, 545, 19, 14);
+        getContentPane().add(lblFT3Y);
+
+        txtFT3Y = new JTextField();
+        txtFT3Y.setBounds(255, 539, 45, 29);
+        getContentPane().add(txtFT3Y);
+
+        btnFT3Transformar = new JButton();
+        btnFT3Transformar.setText("Transformar");
+        btnFT3Transformar.setBackground(Color.CYAN);
+        btnFT3Transformar.setBounds(36,535,124,41);
+        getContentPane().add(btnFT3Transformar);
+
+        lblFT3Angulo = new JLabel();
+        lblFT3Angulo.setText("Angulo:");
+        lblFT3Angulo.setFont(fonte_secundaria);
+        lblFT3Angulo.setBounds(45, 495, 67,16);
+        getContentPane().add(lblFT3Angulo);
+
+        txtFT3Angulo = new JTextField();
+        txtFT3Angulo.setBounds(105,489,55,26);
+        getContentPane().add(txtFT3Angulo);
+
+        lblFT3CR = new JLabel();
+        lblFT3CR.setText("Centro de Rotação:");
+        lblFT3CR.setFont(fonte_secundaria);
+        lblFT3CR.setBounds(169,494, 157,16);
+        getContentPane().add(lblFT3CR);
+
+
+
+
+
         getContentPane().add(pnlFuncTrans3);
 
         lblFuncRast = new JLabel();
@@ -179,6 +335,27 @@ public class TelaPrincipal extends JFrame{
         pnlFuncRast1 = new JPanel();
         pnlFuncRast1.setBounds(26, 634, 300,115);
         pnlFuncRast1.setBorder(borda);
+
+        lblFR1DM = new JLabel();
+        lblFR1DM.setText("Distância mínima:");
+        lblFR1DM.setFont(fonte_secundaria);
+        lblFR1DM.setBounds(36, 657, 140,14);
+        getContentPane().add(lblFR1DM);
+
+        txtFR1DM = new JTextField();
+        txtFR1DM.setBounds(176, 652, 96,29);
+        getContentPane().add(txtFR1DM);
+
+        btnFR1Rastrear = new JButton();
+        btnFR1Rastrear.setText("Rastrear");
+        btnFR1Rastrear.setBackground(Color.red);
+        btnFR1Rastrear.setBounds(36,702,236,41);
+        getContentPane().add(btnFR1Rastrear);
+
+
+
+
+
         getContentPane().add(pnlFuncRast1);
 
 
@@ -200,11 +377,58 @@ public class TelaPrincipal extends JFrame{
         pnlFuncRast2 = new JPanel();
         pnlFuncRast2.setBounds(349, 634, 166, 115);
         pnlFuncRast2. setBorder(borda);
+
+
+        lblFR2DM = new JLabel();
+        lblFR2DM.setText("Distância mín:");
+        lblFR2DM.setFont(fonte_secundaria);
+        lblFR2DM.setBounds(356, 657, 106,14);
+        getContentPane().add(lblFR2DM);
+
+        txtFR2DM = new JTextField();
+        txtFR2DM.setBounds(462, 652, 48,29);
+        getContentPane().add(txtFR2DM);
+
+        btnFR2Rastrear = new JButton();
+        btnFR2Rastrear.setText("Rastrear");
+        btnFR2Rastrear.setBackground(Color.red);
+        btnFR2Rastrear.setBounds(356,702,154,41);
+        getContentPane().add(btnFR2Rastrear);
+
+
+
+
+
+
+
+
         getContentPane().add(pnlFuncRast2);
 
         pnlFuncRast3 = new JPanel();
         pnlFuncRast3.setBounds(582, 634, 166, 115);
         pnlFuncRast3. setBorder(borda);
+
+
+        lblFR3TM = new JLabel();
+        lblFR3TM.setText("Tempo míni:");
+        lblFR3TM.setFont(fonte_secundaria);
+        lblFR3TM.setBounds(588, 657, 95,14);
+        getContentPane().add(lblFR3TM);
+
+        txtFR3TM = new JTextField();
+        txtFR3TM.setBounds(683, 652, 59,29);
+        getContentPane().add(txtFR3TM);
+
+        btnFR3Rastrear = new JButton();
+        btnFR3Rastrear.setText("Rastrear");
+        btnFR3Rastrear.setBackground(Color.red);
+        btnFR3Rastrear.setBounds(588,702,154,41);
+        getContentPane().add(btnFR3Rastrear);
+
+
+
+
+
         getContentPane().add(pnlFuncRast3);
 
 
@@ -213,11 +437,25 @@ public class TelaPrincipal extends JFrame{
         lblDataGrid = new JLabel();
         lblDataGrid.setText("DataGrid");
         lblDataGrid.setBounds(926, 12, 86, 24);
+
+
+
+
         getContentPane().add(lblDataGrid);
 
         pnlDataGrid = new JPanel();
         pnlDataGrid.setBounds(772, 43, 394, 293);
         pnlDataGrid.setBorder(borda);
+
+        DGTabelModel dtm = new DGTabelModel();
+        tabelaDG = new JTable(dtm);
+        tabelaDG.setBounds(772,43,394,293);
+        sPaneDG = new JScrollPane(tabelaDG);
+        sPaneDG.setBounds(772,43,394,293);
+        getContentPane().add(sPaneDG);
+
+
+
         getContentPane().add(pnlDataGrid);
 
         lblRelatorio = new JLabel();
