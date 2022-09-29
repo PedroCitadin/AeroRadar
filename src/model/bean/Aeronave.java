@@ -10,6 +10,7 @@ public class Aeronave {
     private float distancia;
 
 
+
     public int getId() {
         return id;
     }

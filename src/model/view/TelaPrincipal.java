@@ -2,8 +2,16 @@
 package model.view;
 
 import model.util.DGTabelModel;
+import model.util.ImagemRoda;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -179,14 +187,29 @@ public class TelaPrincipal extends JFrame{
         getContentPane().add(lblDirecaoentrada);
 
 
-        txtAnguloentrada = new JTextField();
-        txtAnguloentrada.setBounds(250, 170, 55,29);
-        getContentPane().add(txtAnguloentrada);
+        txtDirecaoentrada = new JTextField();
+        txtDirecaoentrada.setBounds(250, 170, 55,29);
+        getContentPane().add(txtDirecaoentrada);
 
         btnInserir = new JButton();
         btnInserir.setText("Inserir");
         btnInserir.setBounds(181, 224, 124, 41);
         btnInserir.setBackground(Color.orange);
+        btnInserir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JLabel aviao = new JLabel();
+                aviao.setLocation(Integer.parseInt(txtXentrada.getText()), Integer.parseInt(txtYentrada.getText()));
+                aviao.setVisible(true);
+
+                aviao.setIcon(ImagemRoda.giraAviao(Integer.parseInt(txtAnguloentrada.getText())));
+                aviao.setSize(25,25);
+                pnlRadar.add(aviao);
+
+                pnlRadar.repaint();
+
+            }
+        });
         getContentPane().add(btnInserir);
 
 
