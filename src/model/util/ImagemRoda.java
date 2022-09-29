@@ -25,7 +25,7 @@ public class ImagemRoda extends JPanel {
 
         Graphics2D graphics2D = newImageFromBuffer.createGraphics();
 
-        graphics2D.rotate(Math.toRadians(angulo), widthOfImage / 2, heightOfImage / 2);
+        graphics2D.rotate(Math.toRadians(angulo*(-1)), widthOfImage / 2, heightOfImage / 2);
         graphics2D.drawImage(imageToRotate, null, 0, 0);
 
         return newImageFromBuffer;
