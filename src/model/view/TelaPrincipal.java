@@ -1,16 +1,15 @@
 
 package model.view;
 
+import model.util.ConversorCoordenadas;
 import model.util.DGTabelModel;
 import model.util.ImagemRoda;
+import model.util.JPanelCartesiano;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -35,6 +34,7 @@ public class TelaPrincipal extends JFrame{
     private JPanel pnlFuncRast2;
     private JPanel pnlFuncRast3;
     private JPanel pnlRadar;
+    private JLabel lblPlanoCartesiano;
     private JPanel pnlRelatorio;
     private JPanel pnlDataGrid;
 
@@ -199,14 +199,15 @@ public class TelaPrincipal extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 JLabel aviao = new JLabel();
-                aviao.setLocation(Integer.parseInt(txtXentrada.getText()), Integer.parseInt(txtYentrada.getText()));
+              //  aviao.setLocation(ConversorCoordenadas.converteX(Integer.parseInt(txtXentrada.getText())), ConversorCoordenadas.converteY(Integer.parseInt(txtYentrada.getText())));
+                aviao.setLocation(ConversorCoordenadas.polarX(Integer.parseInt(txtRaioentrada.getText()),Integer.parseInt(txtAnguloentrada.getText())), ConversorCoordenadas.polarY(Integer.parseInt(txtRaioentrada.getText()),Integer.parseInt(txtAnguloentrada.getText())));
                 aviao.setVisible(true);
 
-                aviao.setIcon(ImagemRoda.giraAviao(Integer.parseInt(txtAnguloentrada.getText())));
+                aviao.setIcon(ImagemRoda.giraAviao(Integer.parseInt(txtDirecaoentrada.getText())));
                 aviao.setSize(25,25);
                 pnlRadar.add(aviao);
+                pnlRadar.updateUI();
 
-                pnlRadar.repaint();
 
             }
         });
@@ -390,10 +391,23 @@ public class TelaPrincipal extends JFrame{
         lblRadar.setBounds(521, 12, 56, 24);
         getContentPane().add(lblRadar);
 
+        lblPlanoCartesiano = new JLabel();
+        try{
+
+
+        lblPlanoCartesiano.setIcon(new ImageIcon(ImageIO.read(new File("src\\model\\media\\plano.png"))));
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        lblPlanoCartesiano.setLocation(0,0);
+        lblPlanoCartesiano.setSize(400,400);
 
         pnlRadar = new JPanel();
+        pnlRadar.setLayout(null);
         pnlRadar.setBounds(349, 43, 400, 400);
         pnlRadar.setBorder(borda);
+        pnlRadar.add(lblPlanoCartesiano);
+        pnlRadar.updateUI();
         getContentPane().add(pnlRadar);
 
 
