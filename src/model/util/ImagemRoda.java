@@ -37,7 +37,7 @@ public class ImagemRoda extends JPanel {
         try{
 
 
-        BufferedImage imgoriginal = ImageIO.read(new File("C:\\Users\\pedro\\Documents\\NetBeansProjects\\AeroRadar\\src\\model\\view\\aviao.png"));
+        BufferedImage imgoriginal = ImageIO.read(new File("src\\model\\media\\aviao.png"));
         var imagemRodada = rotateImage(imgoriginal, angulo);
          img = new ImageIcon(imagemRodada);
         }catch (IOException e){
