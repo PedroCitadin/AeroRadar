@@ -1,19 +1,20 @@
 
 package model.view;
 
+import model.bean.Aeronave;
 import model.util.ConversorCoordenadas;
 import model.util.DGTabelModel;
 import model.util.ImagemRoda;
-import model.util.JPanelCartesiano;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
-
+import java.util.List;
 /**
  *
  * @author Pedro Citadin Coelho <pedro_citadin@outlook.com>
@@ -97,6 +98,8 @@ public class TelaPrincipal extends JFrame{
     private JScrollPane sPaneDG;
     private JTable tabelaDG;
 
+    private List<Aeronave> lista_avioes = new ArrayList<Aeronave>();
+
 
     public TelaPrincipal(){
         this.setSize(1200, 800);
@@ -108,10 +111,47 @@ public class TelaPrincipal extends JFrame{
     }
     
     public void criaComponentes(){
+
         fonte_principal = new Font("Arial", Font.PLAIN, 20);
         Font fonte_secundaria = new Font("Arial", Font.PLAIN, 14);
         UIManager.put("Label.font", fonte_principal);
         Border borda = BorderFactory.createLineBorder(Color.black);
+
+        //----------------------coluna 3
+        lblDataGrid = new JLabel();
+        lblDataGrid.setText("DataGrid");
+        lblDataGrid.setBounds(926, 12, 86, 24);
+
+
+
+
+        getContentPane().add(lblDataGrid);
+
+        pnlDataGrid = new JPanel();
+        pnlDataGrid.setBounds(772, 43, 394, 293);
+        pnlDataGrid.setBorder(borda);
+
+        DGTabelModel dtm = new DGTabelModel();
+        tabelaDG = new JTable(dtm);
+        tabelaDG.setBounds(772,43,394,293);
+        sPaneDG = new JScrollPane(tabelaDG);
+        sPaneDG.setBounds(772,43,394,293);
+        getContentPane().add(sPaneDG);
+
+
+
+        getContentPane().add(pnlDataGrid);
+
+        lblRelatorio = new JLabel();
+        lblRelatorio.setText("Relatório");
+        lblRelatorio.setBounds(926, 358, 86,24);
+        getContentPane().add(lblRelatorio);
+
+        pnlRelatorio = new JPanel();
+        pnlRelatorio.setBounds(772, 388, 394, 361);
+        pnlRelatorio.setBorder(borda);
+        getContentPane().add(pnlRelatorio);
+
 
         //-------------------Coluna 1 -----------------------
         lblEntrada = new JLabel();
@@ -198,15 +238,46 @@ public class TelaPrincipal extends JFrame{
         btnInserir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JLabel aviao = new JLabel();
-              //  aviao.setLocation(ConversorCoordenadas.converteX(Integer.parseInt(txtXentrada.getText())), ConversorCoordenadas.converteY(Integer.parseInt(txtYentrada.getText())));
-                aviao.setLocation(ConversorCoordenadas.polarX(Integer.parseInt(txtRaioentrada.getText()),Integer.parseInt(txtAnguloentrada.getText())), ConversorCoordenadas.polarY(Integer.parseInt(txtRaioentrada.getText()),Integer.parseInt(txtAnguloentrada.getText())));
-                aviao.setVisible(true);
+                if (!txtXentrada.getText().equalsIgnoreCase("")&&!txtYentrada.getText().equalsIgnoreCase("")){
+                    Aeronave aviaoOBJ = new Aeronave();
+                    JLabel aviao = new JLabel();
+                    aviao.setLocation(ConversorCoordenadas.converteX(Integer.parseInt(txtXentrada.getText())), ConversorCoordenadas.converteY(Integer.parseInt(txtYentrada.getText())));
+                    aviao.setVisible(true);
 
-                aviao.setIcon(ImagemRoda.giraAviao(Integer.parseInt(txtDirecaoentrada.getText())));
-                aviao.setSize(25,25);
-                pnlRadar.add(aviao);
-                pnlRadar.updateUI();
+                    aviao.setIcon(ImagemRoda.giraAviao(Integer.parseInt(txtDirecaoentrada.getText())));
+                    aviao.setSize(25,25);
+                    aviaoOBJ.setX(Float.parseFloat(txtXentrada.getText()));
+                    aviaoOBJ.setY(Float.parseFloat(txtYentrada.getText()));
+                    aviaoOBJ.setVelocidade(Float.parseFloat(txtVelocidadeentrada.getText()));
+                    aviaoOBJ.setDirecao(Float.parseFloat(txtDirecaoentrada.getText()));
+                    aviaoOBJ.setLabel(aviao);
+                    aviaoOBJ.converteCartesianoPolar();
+                    lista_avioes.add(aviaoOBJ);
+                    dtm.addAeronave(aviaoOBJ);
+                    pnlRadar.add(aviao);
+
+                    pnlRadar.updateUI();
+                } else if (!txtRaioentrada.getText().equalsIgnoreCase("")&&!txtAnguloentrada.getText().equalsIgnoreCase("")) {
+                    JLabel aviao = new JLabel();
+                    Aeronave aviaoOBJ = new Aeronave();
+                    aviao.setLocation(ConversorCoordenadas.polarX(Integer.parseInt(txtRaioentrada.getText()),Integer.parseInt(txtAnguloentrada.getText())), ConversorCoordenadas.polarY(Integer.parseInt(txtRaioentrada.getText()),Integer.parseInt(txtAnguloentrada.getText())));
+                    aviao.setVisible(true);
+
+                    aviao.setIcon(ImagemRoda.giraAviao(Integer.parseInt(txtDirecaoentrada.getText())));
+                    aviao.setSize(25,25);
+                    aviaoOBJ.setRaio(Float.parseFloat(txtRaioentrada.getText()));
+                    aviaoOBJ.setAngulo(Float.parseFloat(txtAnguloentrada.getText()));
+                    aviaoOBJ.setVelocidade(Float.parseFloat(txtVelocidadeentrada.getText()));
+                    aviaoOBJ.setDirecao(Float.parseFloat(txtDirecaoentrada.getText()));
+                    aviaoOBJ.setLabel(aviao);
+                    aviaoOBJ.convertePolarCartesiano();
+                    lista_avioes.add(aviaoOBJ);
+                    dtm.addAeronave(aviaoOBJ);
+                    pnlRadar.add(aviao);
+                    pnlRadar.updateUI();
+                }else{
+                    System.out.println("erro");
+                }
 
 
             }
@@ -283,7 +354,7 @@ public class TelaPrincipal extends JFrame{
         getContentPane().add(txtFT2Y);
 
         btnFT2Transformar = new JButton();
-        btnFT2Transformar.setText("Transformar");
+        btnFT2Transformar.setText("Escalonar");
         btnFT2Transformar.setBackground(Color.CYAN);
         btnFT2Transformar.setBounds(195,397,124,41);
         getContentPane().add(btnFT2Transformar);
@@ -324,7 +395,7 @@ public class TelaPrincipal extends JFrame{
         getContentPane().add(txtFT3Y);
 
         btnFT3Transformar = new JButton();
-        btnFT3Transformar.setText("Transformar");
+        btnFT3Transformar.setText("Rotacionar");
         btnFT3Transformar.setBackground(Color.CYAN);
         btnFT3Transformar.setBounds(36,535,124,41);
         getContentPane().add(btnFT3Transformar);
@@ -371,7 +442,7 @@ public class TelaPrincipal extends JFrame{
         getContentPane().add(txtFR1DM);
 
         btnFR1Rastrear = new JButton();
-        btnFR1Rastrear.setText("Rastrear");
+        btnFR1Rastrear.setText("Aviões próximos ao Aeroporto");
         btnFR1Rastrear.setBackground(Color.red);
         btnFR1Rastrear.setBounds(36,702,236,41);
         getContentPane().add(btnFR1Rastrear);
@@ -427,7 +498,7 @@ public class TelaPrincipal extends JFrame{
         getContentPane().add(txtFR2DM);
 
         btnFR2Rastrear = new JButton();
-        btnFR2Rastrear.setText("Rastrear");
+        btnFR2Rastrear.setText("Aviões Próximo");
         btnFR2Rastrear.setBackground(Color.red);
         btnFR2Rastrear.setBounds(356,702,154,41);
         getContentPane().add(btnFR2Rastrear);
@@ -457,7 +528,7 @@ public class TelaPrincipal extends JFrame{
         getContentPane().add(txtFR3TM);
 
         btnFR3Rastrear = new JButton();
-        btnFR3Rastrear.setText("Rastrear");
+        btnFR3Rastrear.setText("Em rota de colisão");
         btnFR3Rastrear.setBackground(Color.red);
         btnFR3Rastrear.setBounds(588,702,154,41);
         getContentPane().add(btnFR3Rastrear);
@@ -470,40 +541,7 @@ public class TelaPrincipal extends JFrame{
 
 
 
-        //----------------------coluna 3
-        lblDataGrid = new JLabel();
-        lblDataGrid.setText("DataGrid");
-        lblDataGrid.setBounds(926, 12, 86, 24);
 
-
-
-
-        getContentPane().add(lblDataGrid);
-
-        pnlDataGrid = new JPanel();
-        pnlDataGrid.setBounds(772, 43, 394, 293);
-        pnlDataGrid.setBorder(borda);
-
-        DGTabelModel dtm = new DGTabelModel();
-        tabelaDG = new JTable(dtm);
-        tabelaDG.setBounds(772,43,394,293);
-        sPaneDG = new JScrollPane(tabelaDG);
-        sPaneDG.setBounds(772,43,394,293);
-        getContentPane().add(sPaneDG);
-
-
-
-        getContentPane().add(pnlDataGrid);
-
-        lblRelatorio = new JLabel();
-        lblRelatorio.setText("Relatório");
-        lblRelatorio.setBounds(926, 358, 86,24);
-        getContentPane().add(lblRelatorio);
-
-        pnlRelatorio = new JPanel();
-        pnlRelatorio.setBounds(772, 388, 394, 361);
-        pnlRelatorio.setBorder(borda);
-        getContentPane().add(pnlRelatorio);
 
     }
     

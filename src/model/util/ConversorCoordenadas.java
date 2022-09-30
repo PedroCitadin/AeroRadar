@@ -9,21 +9,23 @@ public class ConversorCoordenadas {
 
 
     public static int converteX(int x){
+
         return x+200-(25/2);
     }
     public static int converteY(int y){
+
         return (y*(-1))+200-(25/2);
     }
 
 
     public static int polarX(int raio, int angulo){
-        int x = (int) (Math.cos(angulo)*raio);
+        int x = (int) (Math.cos(Math.toRadians(angulo))*raio);
 
         return converteX(x);
     }
 
     public static int polarY(int raio, int angulo){
-        int y = (int) (Math.sin(angulo)*raio);
+        int y = (int) (Math.sin(Math.toRadians(angulo))*raio);
 
         return converteY(y);
     }

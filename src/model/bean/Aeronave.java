@@ -1,5 +1,7 @@
 package model.bean;
 
+import javax.swing.*;
+
 public class Aeronave {
     private int id;
     private float x;
@@ -7,9 +9,17 @@ public class Aeronave {
     private float raio;
     private float angulo;
     private float velocidade;
-    private float distancia;
+    private float direcao;
 
+    private JLabel label;
 
+    public JLabel getLabel() {
+        return label;
+    }
+
+    public void setLabel(JLabel label) {
+        this.label = label;
+    }
 
     public int getId() {
         return id;
@@ -59,11 +69,27 @@ public class Aeronave {
         this.velocidade = velocidade;
     }
 
-    public float getDistancia() {
-        return distancia;
+    public float getDirecao() {
+        return direcao;
     }
 
-    public void setDistancia(float distancia) {
-        this.distancia = distancia;
+    public void setDirecao(float direcao) {
+        this.direcao = direcao;
     }
+
+
+    public void convertePolarCartesiano(){
+        this.x = (float) (Math.cos(Math.toRadians(this.angulo))*this.raio);
+        this.y = (float) (Math.sin(Math.toRadians(this.angulo))*this.raio);
+
+    }
+
+    public void converteCartesianoPolar(){
+        this.raio = (float) Math.sqrt((this.x*this.x)+(this.y*this.y));
+        var coefA = this.y/this.x;
+        System.out.println(coefA);
+        this.angulo = (float) Math.toDegrees(Math.atan(coefA));
+
+    }
+
 }

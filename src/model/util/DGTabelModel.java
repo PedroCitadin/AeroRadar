@@ -48,7 +48,7 @@ public class DGTabelModel extends AbstractTableModel {
         Aeronave.setRaio(aValue.getRaio());
         Aeronave.setAngulo(aValue.getAngulo());
         Aeronave.setVelocidade(aValue.getVelocidade());
-        Aeronave.setDistancia(aValue.getDistancia());
+        Aeronave.setDirecao(aValue.getDirecao());
         fireTableCellUpdated(rowIndex, 1);
         fireTableCellUpdated(rowIndex, 2);
         fireTableCellUpdated(rowIndex, 3);
@@ -79,7 +79,7 @@ public class DGTabelModel extends AbstractTableModel {
             case 6:
                 Aeronave.setVelocidade(Float.parseFloat(aValue.toString()));
             case 7:
-                Aeronave.setDistancia(Float.parseFloat(aValue.toString()));
+                Aeronave.setDirecao(Float.parseFloat(aValue.toString()));
 
             default:
                 System.err.println("Índice da coluna inválido");
@@ -98,7 +98,7 @@ public class DGTabelModel extends AbstractTableModel {
             case 4: valueObject = String.valueOf(AeronaveSelecionado.getRaio()); break;
             case 5: valueObject = String.valueOf(AeronaveSelecionado.getAngulo()); break;
             case 6: valueObject = String.valueOf(AeronaveSelecionado.getVelocidade()); break;
-            case 7: valueObject = String.valueOf(AeronaveSelecionado.getDistancia()); break;
+            case 7: valueObject = String.valueOf(AeronaveSelecionado.getDirecao()); break;
             default: System.err.println("Índice inválido para propriedade do bean Usuario.class");
         }
 
