@@ -5,6 +5,7 @@ import model.bean.Aeronave;
 import model.util.ConversorCoordenadas;
 import model.util.DGTabelModel;
 import model.util.ImagemRoda;
+import model.util.NumeredBorder;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,12 +15,14 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
+import java.util.HashMap;
 import java.util.List;
 /**
  *
  * @author Pedro Citadin Coelho <pedro_citadin@outlook.com>
  */
 public class TelaPrincipal extends JFrame{
+    private HashMap<Integer, Integer> contaID = new HashMap<Integer, Integer>();
     private Font fonte_principal;
     private JLabel lblEntrada;
     private JLabel lblRadar;
@@ -36,7 +39,9 @@ public class TelaPrincipal extends JFrame{
     private JPanel pnlFuncRast3;
     private JPanel pnlRadar;
     private JLabel lblPlanoCartesiano;
-    private JPanel pnlRelatorio;
+
+    private JTextArea txtRelatorio;
+    private JScrollPane pnlRelatorio;
     private JPanel pnlDataGrid;
 
     ///entrada de dados
@@ -147,7 +152,12 @@ public class TelaPrincipal extends JFrame{
         lblRelatorio.setBounds(926, 358, 86,24);
         getContentPane().add(lblRelatorio);
 
-        pnlRelatorio = new JPanel();
+        txtRelatorio = new JTextArea();
+        txtRelatorio.setBounds(772, 388, 389, 361);
+        txtRelatorio.setBorder(new NumeredBorder());
+        txtRelatorio.setEditable(false);
+
+        pnlRelatorio = new JScrollPane(txtRelatorio);
         pnlRelatorio.setBounds(772, 388, 394, 361);
         pnlRelatorio.setBorder(borda);
         getContentPane().add(pnlRelatorio);
@@ -251,6 +261,7 @@ public class TelaPrincipal extends JFrame{
                     aviaoOBJ.setVelocidade(Float.parseFloat(txtVelocidadeentrada.getText()));
                     aviaoOBJ.setDirecao(Float.parseFloat(txtDirecaoentrada.getText()));
                     aviaoOBJ.setLabel(aviao);
+                    aviaoOBJ.setId(geraId());
                     aviaoOBJ.converteCartesianoPolar();
                     lista_avioes.add(aviaoOBJ);
                     dtm.addAeronave(aviaoOBJ);
@@ -270,6 +281,7 @@ public class TelaPrincipal extends JFrame{
                     aviaoOBJ.setVelocidade(Float.parseFloat(txtVelocidadeentrada.getText()));
                     aviaoOBJ.setDirecao(Float.parseFloat(txtDirecaoentrada.getText()));
                     aviaoOBJ.setLabel(aviao);
+                    aviaoOBJ.setId(geraId());
                     aviaoOBJ.convertePolarCartesiano();
                     lista_avioes.add(aviaoOBJ);
                     dtm.addAeronave(aviaoOBJ);
@@ -445,6 +457,15 @@ public class TelaPrincipal extends JFrame{
         btnFR1Rastrear.setText("Aviões próximos ao Aeroporto");
         btnFR1Rastrear.setBackground(Color.red);
         btnFR1Rastrear.setBounds(36,702,236,41);
+        btnFR1Rastrear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                float distancia = Float.valueOf(txtFR1DM.getText());
+                for (Aeronave a: Aeronave.calculaBase(lista_avioes, distancia)){
+                    txtRelatorio.setText(txtRelatorio.getText()+"Avião "+a.getId()+" está próximo da base \n");
+                }
+            }
+        });
         getContentPane().add(btnFR1Rastrear);
 
 
@@ -545,6 +566,20 @@ public class TelaPrincipal extends JFrame{
 
     }
     
-    
+    protected int geraId(){
+        int id = 1;
+        boolean verificador = false;
+        while(!verificador){
+            if (contaID.containsKey(id)){
+                id++;
+            }else{
+                contaID.put(id, id);
+                verificador = true;
+            }
+        }
+
+        return id;
+
+    }
     
 }

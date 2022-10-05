@@ -1,6 +1,9 @@
 package model.bean;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Formattable;
+import java.util.List;
 
 public class Aeronave {
     private int id;
@@ -91,5 +94,15 @@ public class Aeronave {
         this.angulo = (float) Math.toDegrees(Math.atan(coefA));
 
     }
+    public static List<Aeronave> calculaBase(List<Aeronave> lista, float distancia){
+        List<Aeronave> listraproximos = new ArrayList<Aeronave>();
+        for (Aeronave aero: lista){
+            if (aero.raio<=distancia){
+                listraproximos.add(aero);
+            }
+        }
 
+
+        return listraproximos;
+    }
 }
