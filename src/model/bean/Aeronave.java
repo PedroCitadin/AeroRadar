@@ -1,9 +1,7 @@
 package model.bean;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Formattable;
-import java.util.List;
+import java.util.*;
 
 public class Aeronave {
     private int id;
@@ -13,6 +11,15 @@ public class Aeronave {
     private float angulo;
     private float velocidade;
     private float direcao;
+    private boolean selecionado;
+
+    public boolean isSelecionado() {
+        return selecionado;
+    }
+
+    public void setSelecionado(boolean selecionado) {
+        this.selecionado = selecionado;
+    }
 
     private JLabel label;
 
@@ -94,7 +101,7 @@ public class Aeronave {
         this.angulo = (float) Math.toDegrees(Math.atan(coefA));
 
     }
-    public static List<Aeronave> calculaBase(List<Aeronave> lista, float distancia){
+    public static List<Aeronave> calculaBase(Collection<Aeronave> lista, float distancia){
         List<Aeronave> listraproximos = new ArrayList<Aeronave>();
         for (Aeronave aero: lista){
             if (aero.raio<=distancia){
@@ -104,5 +111,51 @@ public class Aeronave {
 
 
         return listraproximos;
+    }
+
+    public static List<String> calculaDistAvioes(Collection<Aeronave> lista, float distancia){
+        List<String> listaproximos = new ArrayList<String>();
+        HashMap<String, Float> mapAux = new HashMap<String, Float>();
+        for (Aeronave a1: lista){
+            for (Aeronave a2: lista){
+                if (a1.getId()!=a2.getId()){
+                    if (a1.getId()<a2.getId()){
+                        if (!mapAux.containsKey(a1.getId()+"-"+a2.getId())){
+                            mapAux.put(a1.getId()+"-"+a2.getId(), calculaDist(a1, a2));
+                            if (calculaDist(a1, a2)<=distancia){
+                                listaproximos.add("Aviões "+a1.getId()+" e "+a2.getId()+" estão proximos");
+                            }
+                        }
+                    }else{
+                        if (!mapAux.containsKey(a2.getId()+"-"+a1.getId())){
+                            mapAux.put(a2.getId()+"-"+a1.getId(), calculaDist(a1, a2));
+                            if (calculaDist(a1, a2)<=distancia){
+                                listaproximos.add("Aviões "+a1.getId()+" e "+a2.getId()+" estão proximos");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return listaproximos;
+
+    }
+
+    public static float calculaDist(Aeronave a1, Aeronave a2){
+        float dx, dy;
+        if (a1.getX()*a2.getX()>=0){
+            dx = Math.abs(a1.getX()) - Math.abs(a2.getX());
+        }else{
+            dx = Math.abs(a1.getX()) + Math.abs(a2.getX());
+        }
+        if (a1.getY()*a2.getY()>=0){
+            dy = Math.abs(a1.getY()) - Math.abs(a2.getY());
+        }else{
+            dy = Math.abs(a1.getY()) + Math.abs(a2.getY());
+        }
+
+        return (float) Math.sqrt((dx*dx)+(dy*dy));
     }
 }

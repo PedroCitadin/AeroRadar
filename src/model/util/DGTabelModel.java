@@ -9,6 +9,7 @@ import java.util.List;
 public class DGTabelModel extends AbstractTableModel {
 
     private List<Aeronave> aeronaves;
+
     private String[] colunas = new String[]{
             "","ID", "X", "Y", "R", "A", "V", "D"
     };
@@ -35,13 +36,17 @@ public class DGTabelModel extends AbstractTableModel {
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        return String.class;
+        if (columnIndex!=0){
+            return String.class;
+        }else{
+            return Boolean.class;
+        }
     }
 
 
     public void setValueAt(Aeronave aValue, int rowIndex) {
         Aeronave Aeronave = aeronaves.get(rowIndex);
-
+        Aeronave.setSelecionado(aValue.isSelecionado());
         Aeronave.setId(aValue.getId());
         Aeronave.setX(aValue.getX());
         Aeronave.setY(aValue.getY());
@@ -49,6 +54,7 @@ public class DGTabelModel extends AbstractTableModel {
         Aeronave.setAngulo(aValue.getAngulo());
         Aeronave.setVelocidade(aValue.getVelocidade());
         Aeronave.setDirecao(aValue.getDirecao());
+        fireTableCellUpdated(rowIndex, 0);
         fireTableCellUpdated(rowIndex, 1);
         fireTableCellUpdated(rowIndex, 2);
         fireTableCellUpdated(rowIndex, 3);
@@ -64,10 +70,15 @@ public class DGTabelModel extends AbstractTableModel {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         Aeronave Aeronave = aeronaves.get(rowIndex);
+        try{
+
 
         switch (columnIndex) {
+            case 0:
+                Aeronave.setSelecionado(Boolean.valueOf(aValue.toString()));
             case 1:
-                Aeronave.setId(Integer.parseInt( aValue.toString()));
+
+                Aeronave.setId(Integer.parseInt(aValue.toString()));
             case 2:
                 Aeronave.setX(Float.parseFloat(aValue.toString()));
             case 3:
@@ -84,6 +95,9 @@ public class DGTabelModel extends AbstractTableModel {
             default:
                 System.err.println("Índice da coluna inválido");
         }
+        }catch (NumberFormatException e){
+
+        }
         fireTableCellUpdated(rowIndex, columnIndex);
     }
 
@@ -91,7 +105,9 @@ public class DGTabelModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         Aeronave AeronaveSelecionado = aeronaves.get(rowIndex);
         String valueObject = null;
+        boolean valueObjectB = false;
         switch(columnIndex){
+            case 0: valueObjectB = AeronaveSelecionado.isSelecionado(); return valueObjectB;
             case 1: valueObject = String.valueOf(AeronaveSelecionado.getId()); break;
             case 2: valueObject = String.valueOf(AeronaveSelecionado.getX()); break;
             case 3: valueObject = String.valueOf(AeronaveSelecionado.getY()); break;
@@ -107,7 +123,11 @@ public class DGTabelModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return false;
+        if (columnIndex!=0){
+            return false;
+        }else{
+            return true;
+        }
     }
 
 

@@ -103,8 +103,8 @@ public class TelaPrincipal extends JFrame{
     private JScrollPane sPaneDG;
     private JTable tabelaDG;
 
-    private List<Aeronave> lista_avioes = new ArrayList<Aeronave>();
-
+    private HashMap<Integer,Aeronave> lista_avioes = new HashMap<Integer, Aeronave>();
+    private JLabel lblDescricao;
 
     public TelaPrincipal(){
         this.setSize(1200, 800);
@@ -263,7 +263,7 @@ public class TelaPrincipal extends JFrame{
                     aviaoOBJ.setLabel(aviao);
                     aviaoOBJ.setId(geraId());
                     aviaoOBJ.converteCartesianoPolar();
-                    lista_avioes.add(aviaoOBJ);
+                    lista_avioes.put(aviaoOBJ.getId(),aviaoOBJ);
                     dtm.addAeronave(aviaoOBJ);
                     pnlRadar.add(aviao);
 
@@ -283,7 +283,7 @@ public class TelaPrincipal extends JFrame{
                     aviaoOBJ.setLabel(aviao);
                     aviaoOBJ.setId(geraId());
                     aviaoOBJ.convertePolarCartesiano();
-                    lista_avioes.add(aviaoOBJ);
+                    lista_avioes.put(aviaoOBJ.getId(),aviaoOBJ);
                     dtm.addAeronave(aviaoOBJ);
                     pnlRadar.add(aviao);
                     pnlRadar.updateUI();
@@ -330,9 +330,15 @@ public class TelaPrincipal extends JFrame{
         getContentPane().add(txtFT1Y);
 
         btnFT1Transformar = new JButton();
-        btnFT1Transformar.setText("Transformar");
+        btnFT1Transformar.setText("Translandar");
         btnFT1Transformar.setBackground(Color.CYAN);
         btnFT1Transformar.setBounds(38,397,124,41);
+        btnFT1Transformar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
         getContentPane().add(btnFT1Transformar);
 
 
@@ -461,7 +467,7 @@ public class TelaPrincipal extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 float distancia = Float.valueOf(txtFR1DM.getText());
-                for (Aeronave a: Aeronave.calculaBase(lista_avioes, distancia)){
+                for (Aeronave a: Aeronave.calculaBase((List<Aeronave>) lista_avioes.values(), distancia)){
                     txtRelatorio.setText(txtRelatorio.getText()+"Avião "+a.getId()+" está próximo da base \n");
                 }
             }
@@ -502,6 +508,15 @@ public class TelaPrincipal extends JFrame{
         pnlRadar.updateUI();
         getContentPane().add(pnlRadar);
 
+        lblDescricao = new JLabel();
+        lblDescricao.setBounds(349, 471, 400, 119);
+        try{
+            lblDescricao.setIcon(new ImageIcon(ImageIO.read(new File("src\\model\\media\\descricao.png"))));
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        getContentPane().add(lblDescricao);
+
 
         pnlFuncRast2 = new JPanel();
         pnlFuncRast2.setBounds(349, 634, 166, 115);
@@ -522,6 +537,15 @@ public class TelaPrincipal extends JFrame{
         btnFR2Rastrear.setText("Aviões Próximo");
         btnFR2Rastrear.setBackground(Color.red);
         btnFR2Rastrear.setBounds(356,702,154,41);
+        btnFR2Rastrear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                float distancia = Float.valueOf(txtFR2DM.getText());
+                for (String s:Aeronave.calculaDistAvioes(lista_avioes.values(), distancia)){
+                    txtRelatorio.setText(txtRelatorio.getText()+s+" \n" );
+                }
+            }
+        });
         getContentPane().add(btnFR2Rastrear);
 
 
