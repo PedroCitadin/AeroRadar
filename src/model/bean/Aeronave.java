@@ -186,4 +186,10 @@ public class Aeronave {
         a.alteraPosicao(x_final, y_final);
 
     }
+    public static void escalonar(Aeronave a, int x, int y){
+        int novoX = (int) (a.getX()*(x/100));
+        int novoY = (int) (a.getY()*(y/100));
+        a.alteraPosicao(novoX, novoY);
+
+    }
 }

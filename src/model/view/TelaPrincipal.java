@@ -384,6 +384,21 @@ public class TelaPrincipal extends JFrame{
         btnFT2Transformar.setText("Escalonar");
         btnFT2Transformar.setBackground(Color.CYAN);
         btnFT2Transformar.setBounds(195,397,124,41);
+        btnFT2Transformar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i<dtm.getRowCount();i++){
+                    if ((boolean) dtm.getValueAt(i, 0)){
+                        Aeronave.escalonar(dtm.getAeronave(i), (Integer.parseInt(txtFT2X.getText())), Integer.parseInt(txtFT2Y.getText()));
+
+
+
+                    }
+                }
+                pnlRadar.updateUI();
+                tabelaDG.updateUI();
+            }
+        });
         getContentPane().add(btnFT2Transformar);
 
 
