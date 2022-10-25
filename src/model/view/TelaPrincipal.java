@@ -336,7 +336,16 @@ public class TelaPrincipal extends JFrame{
         btnFT1Transformar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i<dtm.getRowCount();i++){
+                    if ((boolean) dtm.getValueAt(i, 0)){
+                        Aeronave.translandar(dtm.getAeronave(i), (Integer.parseInt(txtFT1X.getText())), Integer.parseInt(txtFT1Y.getText()));
 
+
+
+                    }
+                }
+                pnlRadar.updateUI();
+                tabelaDG.updateUI();
             }
         });
         getContentPane().add(btnFT1Transformar);
@@ -416,6 +425,21 @@ public class TelaPrincipal extends JFrame{
         btnFT3Transformar.setText("Rotacionar");
         btnFT3Transformar.setBackground(Color.CYAN);
         btnFT3Transformar.setBounds(36,535,124,41);
+        btnFT3Transformar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i<dtm.getRowCount();i++){
+                    if ((boolean) dtm.getValueAt(i, 0)){
+                        Aeronave.rotacionar(dtm.getAeronave(i), (Integer.parseInt(txtFT3X.getText())), Integer.parseInt(txtFT3Y.getText()), Float.parseFloat(txtFT3Angulo.getText()));
+
+
+
+                    }
+                }
+                pnlRadar.updateUI();
+                tabelaDG.updateUI();
+            }
+        });
         getContentPane().add(btnFT3Transformar);
 
         lblFT3Angulo = new JLabel();

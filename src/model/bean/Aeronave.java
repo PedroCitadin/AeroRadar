@@ -1,5 +1,7 @@
 package model.bean;
 
+import model.util.ConversorCoordenadas;
+
 import javax.swing.*;
 import java.util.*;
 
@@ -97,7 +99,7 @@ public class Aeronave {
     public void converteCartesianoPolar(){
         this.raio = (float) Math.sqrt((this.x*this.x)+(this.y*this.y));
         var coefA = this.y/this.x;
-        System.out.println(coefA);
+
         this.angulo = (float) Math.toDegrees(Math.atan(coefA));
 
     }
@@ -157,5 +159,31 @@ public class Aeronave {
         }
 
         return (float) Math.sqrt((dx*dx)+(dy*dy));
+    }
+    public void alteraPosicao(int x, int y){
+        this.x = x;
+        this.y = y;
+        this.converteCartesianoPolar();
+        this.label.setBounds(ConversorCoordenadas.converteX(x), ConversorCoordenadas.converteY(y), this.label.getWidth(), this.label.getHeight());
+    }
+    public static void translandar(Aeronave a, int x, int y){
+        int novoX = (int) (a.x+x);
+        int novoY = (int) (a.y+y);
+        a.alteraPosicao(novoX, novoY);
+
+
+    }
+    public static void rotacionar(Aeronave a, int x, int y, float angulo){
+        var cos = Math.cos(Math.toRadians(angulo));
+
+        var sin = Math.sin(Math.toRadians(angulo));
+        var x_relativo = a.getX() - x;
+        var y_relativo = a.getY() - y;
+        int x2 = (int) (x_relativo * cos - y_relativo * sin);
+        int y2 = (int) (y_relativo * cos + x_relativo * sin);
+        int x_final = (int) (x2+x_relativo);
+        int y_final = (int) (y2+y_relativo);
+        a.alteraPosicao(x_final, y_final);
+
     }
 }
