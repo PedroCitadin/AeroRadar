@@ -187,9 +187,12 @@ public class Aeronave {
 
     }
     public static void escalonar(Aeronave a, int x, int y){
-        int novoX = (int) (a.getX()*(x/100));
-        int novoY = (int) (a.getY()*(y/100));
-        a.alteraPosicao(novoX, novoY);
+        float xf = x;
+        float yf= y;
+        var novoX = a.getX()*(xf/100);
+        var novoY =  a.getY()*(yf/100);
+
+        a.alteraPosicao((int) novoX, (int) novoY);
 
     }
 }
