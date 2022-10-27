@@ -10,6 +10,8 @@ import model.util.NumeredBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -17,11 +19,11 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.util.HashMap;
 import java.util.List;
+
 /**
- *
  * @author Pedro Citadin Coelho <pedro_citadin@outlook.com>
  */
-public class TelaPrincipal extends JFrame{
+public class TelaPrincipal extends JFrame {
     private HashMap<Integer, Integer> contaID = new HashMap<Integer, Integer>();
     private Font fonte_principal;
     private JLabel lblEntrada;
@@ -103,10 +105,12 @@ public class TelaPrincipal extends JFrame{
     private JScrollPane sPaneDG;
     private JTable tabelaDG;
 
-    private HashMap<Integer,Aeronave> lista_avioes = new HashMap<Integer, Aeronave>();
+    private HashMap<Integer, Aeronave> lista_avioes = new HashMap<Integer, Aeronave>();
     private JLabel lblDescricao;
 
-    public TelaPrincipal(){
+    private JButton deletaAvião;
+
+    public TelaPrincipal() {
         this.setSize(1200, 800);
         setResizable(false);
         setTitle("AeroRadar");
@@ -114,8 +118,8 @@ public class TelaPrincipal extends JFrame{
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         criaComponentes();
     }
-    
-    public void criaComponentes(){
+
+    public void criaComponentes() {
 
         fonte_principal = new Font("Arial", Font.PLAIN, 20);
         Font fonte_secundaria = new Font("Arial", Font.PLAIN, 14);
@@ -128,9 +132,8 @@ public class TelaPrincipal extends JFrame{
         lblDataGrid.setBounds(926, 12, 86, 24);
 
 
-
-
         getContentPane().add(lblDataGrid);
+
 
         pnlDataGrid = new JPanel();
         pnlDataGrid.setBounds(772, 43, 394, 293);
@@ -138,18 +141,48 @@ public class TelaPrincipal extends JFrame{
 
         DGTabelModel dtm = new DGTabelModel();
         tabelaDG = new JTable(dtm);
-        tabelaDG.setBounds(772,43,394,293);
-        sPaneDG = new JScrollPane(tabelaDG);
-        sPaneDG.setBounds(772,43,394,293);
-        getContentPane().add(sPaneDG);
+        tabelaDG.setBounds(772, 43, 394, 293);
+        tabelaDG.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
 
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+
+                    for (int i = 0; i < dtm.getRowCount(); i++) {
+                        if ((boolean) dtm.getValueAt(i, 0)) {
+
+                            var id = Integer.parseInt(dtm.getValueAt(i, 1).toString());
+                            pnlRadar.remove(lista_avioes.get(id).getLabel());
+                            lista_avioes.remove(id);
+                            dtm.removeUsuario(i);
+
+
+                        }
+                    }
+                    pnlRadar.updateUI();
+                    tabelaDG.updateUI();
+                }
+            }
+        });
+        sPaneDG = new JScrollPane(tabelaDG);
+        sPaneDG.setBounds(772, 43, 394, 293);
+        getContentPane().add(sPaneDG);
 
 
         getContentPane().add(pnlDataGrid);
 
         lblRelatorio = new JLabel();
         lblRelatorio.setText("Relatório");
-        lblRelatorio.setBounds(926, 358, 86,24);
+        lblRelatorio.setBounds(926, 358, 86, 24);
         getContentPane().add(lblRelatorio);
 
         txtRelatorio = new JTextArea();
@@ -176,69 +209,69 @@ public class TelaPrincipal extends JFrame{
 
         lblXentrada = new JLabel();
         lblXentrada.setText("X:");
-        lblXentrada.setBounds(104, 65, 19,14);
+        lblXentrada.setBounds(104, 65, 19, 14);
         lblXentrada.setFont(fonte_secundaria);
         getContentPane().add(lblXentrada);
 
 
         txtXentrada = new JTextField();
-        txtXentrada.setBounds(123, 58, 55,29);
+        txtXentrada.setBounds(123, 58, 55, 29);
         getContentPane().add(txtXentrada);
 
         lblYentrada = new JLabel();
         lblYentrada.setText("Y:");
-        lblYentrada.setBounds(231, 65, 19,14);
+        lblYentrada.setBounds(231, 65, 19, 14);
         lblYentrada.setFont(fonte_secundaria);
         getContentPane().add(lblYentrada);
 
 
         txtYentrada = new JTextField();
-        txtYentrada.setBounds(250, 58, 55,29);
+        txtYentrada.setBounds(250, 58, 55, 29);
         getContentPane().add(txtYentrada);
 
         lblRaioentrada = new JLabel();
         lblRaioentrada.setText("Raio:");
-        lblRaioentrada.setBounds(83, 126, 53,16);
+        lblRaioentrada.setBounds(83, 126, 53, 16);
         lblRaioentrada.setFont(fonte_secundaria);
         getContentPane().add(lblRaioentrada);
 
 
         txtRaioentrada = new JTextField();
-        txtRaioentrada.setBounds(123, 119, 55,29);
+        txtRaioentrada.setBounds(123, 119, 55, 29);
         getContentPane().add(txtRaioentrada);
 
         lblAnguloentrada = new JLabel();
         lblAnguloentrada.setText("Angulo:");
-        lblAnguloentrada.setBounds(192, 126, 67,16);
+        lblAnguloentrada.setBounds(192, 126, 67, 16);
         lblAnguloentrada.setFont(fonte_secundaria);
         getContentPane().add(lblAnguloentrada);
 
 
         txtAnguloentrada = new JTextField();
-        txtAnguloentrada.setBounds(250, 119, 55,29);
+        txtAnguloentrada.setBounds(250, 119, 55, 29);
         getContentPane().add(txtAnguloentrada);
 
 
         lblVelocidadeentrada = new JLabel();
         lblVelocidadeentrada.setText("Velocidade:");
-        lblVelocidadeentrada.setBounds(34, 177, 89,16);
+        lblVelocidadeentrada.setBounds(34, 177, 89, 16);
         lblVelocidadeentrada.setFont(fonte_secundaria);
         getContentPane().add(lblVelocidadeentrada);
 
 
         txtVelocidadeentrada = new JTextField();
-        txtVelocidadeentrada.setBounds(123, 170, 55,29);
+        txtVelocidadeentrada.setBounds(123, 170, 55, 29);
         getContentPane().add(txtVelocidadeentrada);
 
         lblDirecaoentrada = new JLabel();
         lblDirecaoentrada.setText("Direção:");
-        lblDirecaoentrada.setBounds(187, 177, 67,16);
+        lblDirecaoentrada.setBounds(187, 177, 67, 16);
         lblDirecaoentrada.setFont(fonte_secundaria);
         getContentPane().add(lblDirecaoentrada);
 
 
         txtDirecaoentrada = new JTextField();
-        txtDirecaoentrada.setBounds(250, 170, 55,29);
+        txtDirecaoentrada.setBounds(250, 170, 55, 29);
         getContentPane().add(txtDirecaoentrada);
 
         btnInserir = new JButton();
@@ -248,14 +281,14 @@ public class TelaPrincipal extends JFrame{
         btnInserir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /*if (!txtXentrada.getText().equalsIgnoreCase("")&&!txtYentrada.getText().equalsIgnoreCase("")){
+                if (!txtXentrada.getText().equalsIgnoreCase("") && !txtYentrada.getText().equalsIgnoreCase("")) {
                     Aeronave aviaoOBJ = new Aeronave();
                     JLabel aviao = new JLabel();
                     aviao.setLocation(ConversorCoordenadas.converteX(Integer.parseInt(txtXentrada.getText())), ConversorCoordenadas.converteY(Integer.parseInt(txtYentrada.getText())));
                     aviao.setVisible(true);
 
                     aviao.setIcon(ImagemRoda.giraAviao(Integer.parseInt(txtDirecaoentrada.getText())));
-                    aviao.setSize(25,25);
+                    aviao.setSize(25, 25);
                     aviaoOBJ.setX(Float.parseFloat(txtXentrada.getText()));
                     aviaoOBJ.setY(Float.parseFloat(txtYentrada.getText()));
                     aviaoOBJ.setVelocidade(Float.parseFloat(txtVelocidadeentrada.getText()));
@@ -263,19 +296,19 @@ public class TelaPrincipal extends JFrame{
                     aviaoOBJ.setLabel(aviao);
                     aviaoOBJ.setId(geraId());
                     aviaoOBJ.converteCartesianoPolar();
-                    lista_avioes.put(aviaoOBJ.getId(),aviaoOBJ);
+                    lista_avioes.put(aviaoOBJ.getId(), aviaoOBJ);
                     dtm.addAeronave(aviaoOBJ);
                     pnlRadar.add(aviao);
 
                     pnlRadar.updateUI();
-                } else if (!txtRaioentrada.getText().equalsIgnoreCase("")&&!txtAnguloentrada.getText().equalsIgnoreCase("")) {
+                } else if (!txtRaioentrada.getText().equalsIgnoreCase("") && !txtAnguloentrada.getText().equalsIgnoreCase("")) {
                     JLabel aviao = new JLabel();
                     Aeronave aviaoOBJ = new Aeronave();
-                    aviao.setLocation(ConversorCoordenadas.polarX(Integer.parseInt(txtRaioentrada.getText()),Integer.parseInt(txtAnguloentrada.getText())), ConversorCoordenadas.polarY(Integer.parseInt(txtRaioentrada.getText()),Integer.parseInt(txtAnguloentrada.getText())));
+                    aviao.setLocation(ConversorCoordenadas.polarX(Integer.parseInt(txtRaioentrada.getText()), Integer.parseInt(txtAnguloentrada.getText())), ConversorCoordenadas.polarY(Integer.parseInt(txtRaioentrada.getText()), Integer.parseInt(txtAnguloentrada.getText())));
                     aviao.setVisible(true);
 
                     aviao.setIcon(ImagemRoda.giraAviao(Integer.parseInt(txtDirecaoentrada.getText())));
-                    aviao.setSize(25,25);
+                    aviao.setSize(25, 25);
                     aviaoOBJ.setRaio(Float.parseFloat(txtRaioentrada.getText()));
                     aviaoOBJ.setAngulo(Float.parseFloat(txtAnguloentrada.getText()));
                     aviaoOBJ.setVelocidade(Float.parseFloat(txtVelocidadeentrada.getText()));
@@ -283,56 +316,18 @@ public class TelaPrincipal extends JFrame{
                     aviaoOBJ.setLabel(aviao);
                     aviaoOBJ.setId(geraId());
                     aviaoOBJ.convertePolarCartesiano();
-                    lista_avioes.put(aviaoOBJ.getId(),aviaoOBJ);
+                    lista_avioes.put(aviaoOBJ.getId(), aviaoOBJ);
                     dtm.addAeronave(aviaoOBJ);
                     pnlRadar.add(aviao);
                     pnlRadar.updateUI();
-                }else{
+                } else {
                     System.out.println("erro");
-                }*/
-                Aeronave aviaoOBJ = new Aeronave();
-                JLabel aviao = new JLabel();
-                aviao.setLocation(ConversorCoordenadas.converteX(1), ConversorCoordenadas.converteY(2));
-                aviao.setVisible(true);
+                }
 
-                aviao.setIcon(ImagemRoda.giraAviao(45));
-                aviao.setSize(25,25);
-                aviaoOBJ.setX(1);
-                aviaoOBJ.setY(2);
-                aviaoOBJ.setVelocidade(200);
-                aviaoOBJ.setDirecao(45);
-                aviaoOBJ.setLabel(aviao);
-                aviaoOBJ.setId(geraId());
-                aviaoOBJ.converteCartesianoPolar();
-                lista_avioes.put(aviaoOBJ.getId(),aviaoOBJ);
-                dtm.addAeronave(aviaoOBJ);
-                pnlRadar.add(aviao);
-
-                pnlRadar.updateUI();
-                Aeronave aviaoOBJ2 = new Aeronave();
-                JLabel aviao2 = new JLabel();
-                aviao2.setLocation(ConversorCoordenadas.converteX(3), ConversorCoordenadas.converteY(1));
-                aviao2.setVisible(true);
-
-                aviao2.setIcon(ImagemRoda.giraAviao(135));
-                aviao2.setSize(25,25);
-                aviaoOBJ2.setX(3);
-                aviaoOBJ2.setY(1);
-                aviaoOBJ2.setVelocidade(1600);
-                aviaoOBJ2.setDirecao(135);
-                aviaoOBJ2.setLabel(aviao);
-                aviaoOBJ2.setId(geraId());
-                aviaoOBJ2.converteCartesianoPolar();
-                lista_avioes.put(aviaoOBJ2.getId(),aviaoOBJ2);
-                dtm.addAeronave(aviaoOBJ2);
-                pnlRadar.add(aviao2);
-
-                pnlRadar.updateUI();
 
             }
         });
         getContentPane().add(btnInserir);
-
 
 
         getContentPane().add(pnlEntrada);
@@ -343,7 +338,7 @@ public class TelaPrincipal extends JFrame{
         this.getContentPane().add(lblFuncTrans);
 
         pnlFuncTrans1 = new JPanel();
-        pnlFuncTrans1.setBounds(26, 329, 142,115);
+        pnlFuncTrans1.setBounds(26, 329, 142, 115);
         pnlFuncTrans1.setBorder(borda);
 
         lblFT1X = new JLabel();
@@ -369,14 +364,13 @@ public class TelaPrincipal extends JFrame{
         btnFT1Transformar = new JButton();
         btnFT1Transformar.setText("Translandar");
         btnFT1Transformar.setBackground(Color.CYAN);
-        btnFT1Transformar.setBounds(38,397,124,41);
+        btnFT1Transformar.setBounds(38, 397, 124, 41);
         btnFT1Transformar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (int i = 0; i<dtm.getRowCount();i++){
-                    if ((boolean) dtm.getValueAt(i, 0)){
+                for (int i = 0; i < dtm.getRowCount(); i++) {
+                    if ((boolean) dtm.getValueAt(i, 0)) {
                         Aeronave.translandar(dtm.getAeronave(i), (Integer.parseInt(txtFT1X.getText())), Integer.parseInt(txtFT1Y.getText()));
-
 
 
                     }
@@ -388,12 +382,10 @@ public class TelaPrincipal extends JFrame{
         getContentPane().add(btnFT1Transformar);
 
 
-
-
         getContentPane().add(pnlFuncTrans1);
 
         pnlFuncTrans2 = new JPanel();
-        pnlFuncTrans2.setBounds(183, 329, 142,115);
+        pnlFuncTrans2.setBounds(183, 329, 142, 115);
         pnlFuncTrans2.setBorder(borda);
 
 
@@ -420,14 +412,13 @@ public class TelaPrincipal extends JFrame{
         btnFT2Transformar = new JButton();
         btnFT2Transformar.setText("Escalonar");
         btnFT2Transformar.setBackground(Color.CYAN);
-        btnFT2Transformar.setBounds(195,397,124,41);
+        btnFT2Transformar.setBounds(195, 397, 124, 41);
         btnFT2Transformar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (int i = 0; i<dtm.getRowCount();i++){
-                    if ((boolean) dtm.getValueAt(i, 0)){
+                for (int i = 0; i < dtm.getRowCount(); i++) {
+                    if ((boolean) dtm.getValueAt(i, 0)) {
                         Aeronave.escalonar(dtm.getAeronave(i), (Integer.parseInt(txtFT2X.getText())), Integer.parseInt(txtFT2Y.getText()));
-
 
 
                     }
@@ -439,17 +430,10 @@ public class TelaPrincipal extends JFrame{
         getContentPane().add(btnFT2Transformar);
 
 
-
-
-
-
-
-
-
         getContentPane().add(pnlFuncTrans2);
 
         pnlFuncTrans3 = new JPanel();
-        pnlFuncTrans3.setBounds(26, 471, 300,115);
+        pnlFuncTrans3.setBounds(26, 471, 300, 115);
         pnlFuncTrans3.setBorder(borda);
 
 
@@ -476,14 +460,13 @@ public class TelaPrincipal extends JFrame{
         btnFT3Transformar = new JButton();
         btnFT3Transformar.setText("Rotacionar");
         btnFT3Transformar.setBackground(Color.CYAN);
-        btnFT3Transformar.setBounds(36,535,124,41);
+        btnFT3Transformar.setBounds(36, 535, 124, 41);
         btnFT3Transformar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (int i = 0; i<dtm.getRowCount();i++){
-                    if ((boolean) dtm.getValueAt(i, 0)){
+                for (int i = 0; i < dtm.getRowCount(); i++) {
+                    if ((boolean) dtm.getValueAt(i, 0)) {
                         Aeronave.rotacionar(dtm.getAeronave(i), (Integer.parseInt(txtFT3X.getText())), Integer.parseInt(txtFT3Y.getText()), Float.parseFloat(txtFT3Angulo.getText()));
-
 
 
                     }
@@ -497,21 +480,18 @@ public class TelaPrincipal extends JFrame{
         lblFT3Angulo = new JLabel();
         lblFT3Angulo.setText("Angulo:");
         lblFT3Angulo.setFont(fonte_secundaria);
-        lblFT3Angulo.setBounds(45, 495, 67,16);
+        lblFT3Angulo.setBounds(45, 495, 67, 16);
         getContentPane().add(lblFT3Angulo);
 
         txtFT3Angulo = new JTextField();
-        txtFT3Angulo.setBounds(105,489,55,26);
+        txtFT3Angulo.setBounds(105, 489, 55, 26);
         getContentPane().add(txtFT3Angulo);
 
         lblFT3CR = new JLabel();
         lblFT3CR.setText("Centro de Rotação:");
         lblFT3CR.setFont(fonte_secundaria);
-        lblFT3CR.setBounds(169,494, 157,16);
+        lblFT3CR.setBounds(169, 494, 157, 16);
         getContentPane().add(lblFT3CR);
-
-
-
 
 
         getContentPane().add(pnlFuncTrans3);
@@ -522,59 +502,54 @@ public class TelaPrincipal extends JFrame{
         this.getContentPane().add(lblFuncRast);
 
         pnlFuncRast1 = new JPanel();
-        pnlFuncRast1.setBounds(26, 634, 300,115);
+        pnlFuncRast1.setBounds(26, 634, 300, 115);
         pnlFuncRast1.setBorder(borda);
 
         lblFR1DM = new JLabel();
         lblFR1DM.setText("Distância mínima:");
         lblFR1DM.setFont(fonte_secundaria);
-        lblFR1DM.setBounds(36, 657, 140,14);
+        lblFR1DM.setBounds(36, 657, 140, 14);
         getContentPane().add(lblFR1DM);
 
         txtFR1DM = new JTextField();
-        txtFR1DM.setBounds(176, 652, 96,29);
+        txtFR1DM.setBounds(176, 652, 96, 29);
         getContentPane().add(txtFR1DM);
 
         btnFR1Rastrear = new JButton();
         btnFR1Rastrear.setText("Aviões próximos ao Aeroporto");
         btnFR1Rastrear.setBackground(Color.red);
-        btnFR1Rastrear.setBounds(36,702,236,41);
+        btnFR1Rastrear.setBounds(36, 702, 236, 41);
         btnFR1Rastrear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 float distancia = Float.valueOf(txtFR1DM.getText());
-                for (Aeronave a: Aeronave.calculaBase(lista_avioes.values(), distancia)){
-                    txtRelatorio.setText(txtRelatorio.getText()+"Avião "+a.getId()+" está próximo da base \n");
+                for (Aeronave a : Aeronave.calculaBase(lista_avioes.values(), distancia)) {
+                    txtRelatorio.setText(txtRelatorio.getText() + "Avião " + a.getId() + " está próximo da base \n");
                 }
             }
         });
         getContentPane().add(btnFR1Rastrear);
 
 
-
-
-
         getContentPane().add(pnlFuncRast1);
 
 
-
-
-    ///////////---------------- Coluna 2---------------
+        ///////////---------------- Coluna 2---------------
         lblRadar = new JLabel();
         lblRadar.setText("Radar");
         lblRadar.setBounds(521, 12, 56, 24);
         getContentPane().add(lblRadar);
 
         lblPlanoCartesiano = new JLabel();
-        try{
+        try {
 
 
-        lblPlanoCartesiano.setIcon(new ImageIcon(ImageIO.read(new File("src\\model\\media\\plano.png"))));
-        }catch (Exception e){
+            lblPlanoCartesiano.setIcon(new ImageIcon(ImageIO.read(new File("src\\model\\media\\plano.png"))));
+        } catch (Exception e) {
             System.out.println(e);
         }
-        lblPlanoCartesiano.setLocation(0,0);
-        lblPlanoCartesiano.setSize(400,400);
+        lblPlanoCartesiano.setLocation(0, 0);
+        lblPlanoCartesiano.setSize(400, 400);
 
         pnlRadar = new JPanel();
         pnlRadar.setLayout(null);
@@ -586,9 +561,9 @@ public class TelaPrincipal extends JFrame{
 
         lblDescricao = new JLabel();
         lblDescricao.setBounds(349, 471, 400, 119);
-        try{
+        try {
             lblDescricao.setIcon(new ImageIcon(ImageIO.read(new File("src\\model\\media\\descricao.png"))));
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
         getContentPane().add(lblDescricao);
@@ -596,91 +571,79 @@ public class TelaPrincipal extends JFrame{
 
         pnlFuncRast2 = new JPanel();
         pnlFuncRast2.setBounds(349, 634, 166, 115);
-        pnlFuncRast2. setBorder(borda);
+        pnlFuncRast2.setBorder(borda);
 
 
         lblFR2DM = new JLabel();
         lblFR2DM.setText("Distância mín:");
         lblFR2DM.setFont(fonte_secundaria);
-        lblFR2DM.setBounds(356, 657, 106,14);
+        lblFR2DM.setBounds(356, 657, 106, 14);
         getContentPane().add(lblFR2DM);
 
         txtFR2DM = new JTextField();
-        txtFR2DM.setBounds(462, 652, 48,29);
+        txtFR2DM.setBounds(462, 652, 48, 29);
         getContentPane().add(txtFR2DM);
 
         btnFR2Rastrear = new JButton();
         btnFR2Rastrear.setText("Aviões Próximo");
         btnFR2Rastrear.setBackground(Color.red);
-        btnFR2Rastrear.setBounds(356,702,154,41);
+        btnFR2Rastrear.setBounds(356, 702, 154, 41);
         btnFR2Rastrear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 float distancia = Float.valueOf(txtFR2DM.getText());
-                for (String s:Aeronave.calculaDistAvioes(lista_avioes.values(), distancia)){
-                    txtRelatorio.setText(txtRelatorio.getText()+s+" \n" );
+                for (String s : Aeronave.calculaDistAvioes(lista_avioes.values(), distancia)) {
+                    txtRelatorio.setText(txtRelatorio.getText() + s + " \n");
                 }
             }
         });
         getContentPane().add(btnFR2Rastrear);
 
 
-
-
-
-
-
-
         getContentPane().add(pnlFuncRast2);
 
         pnlFuncRast3 = new JPanel();
         pnlFuncRast3.setBounds(582, 634, 166, 115);
-        pnlFuncRast3. setBorder(borda);
+        pnlFuncRast3.setBorder(borda);
 
 
         lblFR3TM = new JLabel();
         lblFR3TM.setText("Tempo míni:");
         lblFR3TM.setFont(fonte_secundaria);
-        lblFR3TM.setBounds(588, 657, 95,14);
+        lblFR3TM.setBounds(588, 657, 95, 14);
         getContentPane().add(lblFR3TM);
 
         txtFR3TM = new JTextField();
-        txtFR3TM.setBounds(683, 652, 59,29);
+        txtFR3TM.setBounds(683, 652, 59, 29);
         getContentPane().add(txtFR3TM);
 
         btnFR3Rastrear = new JButton();
         btnFR3Rastrear.setText("Em rota de colisão");
         btnFR3Rastrear.setBackground(Color.red);
-        btnFR3Rastrear.setBounds(588,702,154,41);
+        btnFR3Rastrear.setBounds(588, 702, 154, 41);
         btnFR3Rastrear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (String s : Aeronave.rotaColisao(lista_avioes.values(), 10)){
-                    txtRelatorio.setText(txtRelatorio.getText()+s+" \n" );
+                for (String s : Aeronave.rotaColisao(lista_avioes.values(), Integer.parseInt(txtFR3TM.getText()))) {
+                    txtRelatorio.setText(txtRelatorio.getText() + s + " \n");
                 }
             }
         });
         getContentPane().add(btnFR3Rastrear);
 
 
-
-
-
         getContentPane().add(pnlFuncRast3);
 
 
-
-
-
     }
-    
-    protected int geraId(){
+
+    protected int geraId() {
         int id = 1;
         boolean verificador = false;
-        while(!verificador){
-            if (contaID.containsKey(id)){
+        while (!verificador) {
+            if (contaID.containsKey(id)) {
                 id++;
-            }else{
+            } else {
                 contaID.put(id, id);
                 verificador = true;
             }
@@ -689,5 +652,5 @@ public class TelaPrincipal extends JFrame{
         return id;
 
     }
-    
+
 }

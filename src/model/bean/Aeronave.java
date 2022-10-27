@@ -230,7 +230,9 @@ public class Aeronave {
                                 var tempoA1 = distanciaA1/a1.getVelocidade();
                                 var tempoA2 = distanciaA2/a2.getVelocidade();
                                 var tempofinal = Math.abs(tempoA1 - tempoA2)*3600;
-                                listaproximos.add("Colisão entre os aviões "+a1.getId()+" e "+a2.getId()+" em "+tempofinal+" segundos");
+                               if (tempofinal<=tempo){
+                                   listaproximos.add("Colisão entre os aviões "+a1.getId()+" e "+a2.getId()+" em "+tempofinal+" segundos");
+                               }
                             }
                         }
                     }else{
