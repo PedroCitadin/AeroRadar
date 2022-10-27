@@ -248,7 +248,7 @@ public class TelaPrincipal extends JFrame{
         btnInserir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!txtXentrada.getText().equalsIgnoreCase("")&&!txtYentrada.getText().equalsIgnoreCase("")){
+                /*if (!txtXentrada.getText().equalsIgnoreCase("")&&!txtYentrada.getText().equalsIgnoreCase("")){
                     Aeronave aviaoOBJ = new Aeronave();
                     JLabel aviao = new JLabel();
                     aviao.setLocation(ConversorCoordenadas.converteX(Integer.parseInt(txtXentrada.getText())), ConversorCoordenadas.converteY(Integer.parseInt(txtYentrada.getText())));
@@ -289,8 +289,45 @@ public class TelaPrincipal extends JFrame{
                     pnlRadar.updateUI();
                 }else{
                     System.out.println("erro");
-                }
+                }*/
+                Aeronave aviaoOBJ = new Aeronave();
+                JLabel aviao = new JLabel();
+                aviao.setLocation(ConversorCoordenadas.converteX(1), ConversorCoordenadas.converteY(2));
+                aviao.setVisible(true);
 
+                aviao.setIcon(ImagemRoda.giraAviao(45));
+                aviao.setSize(25,25);
+                aviaoOBJ.setX(1);
+                aviaoOBJ.setY(2);
+                aviaoOBJ.setVelocidade(200);
+                aviaoOBJ.setDirecao(45);
+                aviaoOBJ.setLabel(aviao);
+                aviaoOBJ.setId(geraId());
+                aviaoOBJ.converteCartesianoPolar();
+                lista_avioes.put(aviaoOBJ.getId(),aviaoOBJ);
+                dtm.addAeronave(aviaoOBJ);
+                pnlRadar.add(aviao);
+
+                pnlRadar.updateUI();
+                Aeronave aviaoOBJ2 = new Aeronave();
+                JLabel aviao2 = new JLabel();
+                aviao2.setLocation(ConversorCoordenadas.converteX(3), ConversorCoordenadas.converteY(1));
+                aviao2.setVisible(true);
+
+                aviao2.setIcon(ImagemRoda.giraAviao(135));
+                aviao2.setSize(25,25);
+                aviaoOBJ2.setX(3);
+                aviaoOBJ2.setY(1);
+                aviaoOBJ2.setVelocidade(1600);
+                aviaoOBJ2.setDirecao(135);
+                aviaoOBJ2.setLabel(aviao);
+                aviaoOBJ2.setId(geraId());
+                aviaoOBJ2.converteCartesianoPolar();
+                lista_avioes.put(aviaoOBJ2.getId(),aviaoOBJ2);
+                dtm.addAeronave(aviaoOBJ2);
+                pnlRadar.add(aviao2);
+
+                pnlRadar.updateUI();
 
             }
         });
@@ -506,7 +543,7 @@ public class TelaPrincipal extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 float distancia = Float.valueOf(txtFR1DM.getText());
-                for (Aeronave a: Aeronave.calculaBase((List<Aeronave>) lista_avioes.values(), distancia)){
+                for (Aeronave a: Aeronave.calculaBase(lista_avioes.values(), distancia)){
                     txtRelatorio.setText(txtRelatorio.getText()+"Avião "+a.getId()+" está próximo da base \n");
                 }
             }
@@ -615,6 +652,14 @@ public class TelaPrincipal extends JFrame{
         btnFR3Rastrear.setText("Em rota de colisão");
         btnFR3Rastrear.setBackground(Color.red);
         btnFR3Rastrear.setBounds(588,702,154,41);
+        btnFR3Rastrear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (String s : Aeronave.rotaColisao(lista_avioes.values(), 10)){
+                    txtRelatorio.setText(txtRelatorio.getText()+s+" \n" );
+                }
+            }
+        });
         getContentPane().add(btnFR3Rastrear);
 
 

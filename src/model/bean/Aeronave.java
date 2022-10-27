@@ -160,6 +160,22 @@ public class Aeronave {
 
         return (float) Math.sqrt((dx*dx)+(dy*dy));
     }
+    public static float calculaDistPonto(Aeronave a1, float x, float y){
+
+        float dx, dy;
+        if (a1.getX()*x>=0){
+            dx = Math.abs(a1.getX()) - Math.abs(x);
+        }else{
+            dx = Math.abs(a1.getX()) + Math.abs(x);
+        }
+        if (a1.getY()*y>=0){
+            dy = Math.abs(a1.getY()) - Math.abs(y);
+        }else{
+            dy = Math.abs(a1.getY()) + Math.abs(y);
+        }
+
+        return (float) Math.sqrt((dx*dx)+(dy*dy));
+    }
     public void alteraPosicao(int x, int y){
         this.x = x;
         this.y = y;
@@ -191,4 +207,82 @@ public class Aeronave {
         a.alteraPosicao((int) novoX, (int) novoY);
 
     }
+
+    public static List<String> rotaColisao(Collection<Aeronave> lista, int tempo){
+        List<String> listaproximos = new ArrayList<String>();
+        HashMap<String, Float> mapAux = new HashMap<String, Float>();
+        for (Aeronave a1: lista){
+            for (Aeronave a2: lista){
+                if (a1.getId()!=a2.getId()){
+                    if (a1.getId()<a2.getId()){
+                        if (!mapAux.containsKey(a1.getId()+"-"+a2.getId())){
+                            mapAux.put(a1.getId()+"-"+a2.getId(), calculaDist(a1, a2));
+                            HashMap<String, Float> pontos = Aeronave.calculaPontoEncontro(a1, a2);
+                            if (pontos.containsKey("IMPOSSIVEL")){
+
+                            }else if(pontos.containsKey("TODOS")){
+
+                            }else{
+                                var distanciaA1 = (Aeronave.calculaDistPonto(a1, pontos.get("X"), pontos.get("Y")));
+
+                                var distanciaA2 = (Aeronave.calculaDistPonto(a2, pontos.get("X"), pontos.get("Y")));
+
+                                var tempoA1 = distanciaA1/a1.getVelocidade();
+                                var tempoA2 = distanciaA2/a2.getVelocidade();
+                                var tempofinal = Math.abs(tempoA1 - tempoA2)*3600;
+                                listaproximos.add("Colisão entre os aviões "+a1.getId()+" e "+a2.getId()+" em "+tempofinal+" segundos");
+                            }
+                        }
+                    }else{
+                        if (!mapAux.containsKey(a2.getId()+"-"+a1.getId())){
+                            mapAux.put(a2.getId()+"-"+a1.getId(), calculaDist(a1, a2));
+
+                        }
+                    }
+                }
+            }
+        }
+        return listaproximos;
+    }
+
+
+    public static HashMap<String, Float> calculaPontoEncontro(Aeronave a1, Aeronave a2){
+        HashMap<String, Float> pontos = new HashMap<String, Float>();
+        ////função a1
+        var coefAngular1 = Math.tan(Math.toRadians(a1.getDirecao()));
+        var coefLinear1 = (coefAngular1*a1.getX()-a1.getY())*(-1);
+
+
+        ///função a2
+        var coefAngular2 = Math.tan(Math.toRadians(a2.getDirecao()));
+        var coefLinear2 = (coefAngular2*a2.getX()-a2.getY())*(-1);
+
+
+
+        if (coefAngular1==coefAngular2&&coefLinear1!=coefLinear2){
+            System.out.println("colisão impossivel");
+            pontos.put("IMPOSSIVEL", 0F);
+        }else{
+            if (coefAngular1==coefAngular2&&coefLinear1==coefLinear2){
+                pontos.put("TODOS", 0F);
+            }else{
+                double x = Aeronave.retornaX(coefAngular1, coefAngular2, coefLinear1, coefLinear2);
+                double y = coefAngular1*x+coefLinear1;
+
+                pontos.put("X", (float) x);
+                pontos.put("Y", (float) y);
+
+            }
+        }
+
+        return pontos;
+    }
+    public static double retornaX(double a1, double a2, double b1, double b2){
+
+        var x = ((b2*-1)-(b1*-1))/(a2-a1);
+
+        return x;
+    }
+
+
 }
