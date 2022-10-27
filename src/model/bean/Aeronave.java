@@ -174,16 +174,12 @@ public class Aeronave {
 
     }
     public static void rotacionar(Aeronave a, int x, int y, float angulo){
-        var cos = Math.cos(Math.toRadians(angulo));
+       var angulo_tot = a.getAngulo()+angulo;
 
-        var sin = Math.sin(Math.toRadians(angulo));
-        var x_relativo = a.getX() - x;
-        var y_relativo = a.getY() - y;
-        int x2 = (int) (x_relativo * cos - y_relativo * sin);
-        int y2 = (int) (y_relativo * cos + x_relativo * sin);
-        int x_final = (int) (x2+x_relativo);
-        int y_final = (int) (y2+y_relativo);
-        a.alteraPosicao(x_final, y_final);
+       var x_final = a.getRaio()*Math.cos(Math.toRadians(angulo_tot));
+       var y_final = a.getRaio()*Math.sin(Math.toRadians(angulo_tot));
+
+        a.alteraPosicao((int) x_final,(int) y_final);
 
     }
     public static void escalonar(Aeronave a, int x, int y){
