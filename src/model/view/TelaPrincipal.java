@@ -157,19 +157,21 @@ public class TelaPrincipal extends JFrame {
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_DELETE) {
 
-                    for (int i = 0; i < dtm.getRowCount(); i++) {
-                        if ((boolean) dtm.getValueAt(i, 0)) {
+                    if ( JOptionPane.showConfirmDialog(null,"Tem certeza que deseja excluir esses aviões?", "Aviso",JOptionPane.YES_NO_OPTION)==0){
+                        for (int i = 0; i < dtm.getRowCount(); i++) {
+                            if ((boolean) dtm.getValueAt(i, 0)) {
 
-                            var id = Integer.parseInt(dtm.getValueAt(i, 1).toString());
-                            pnlRadar.remove(lista_avioes.get(id).getLabel());
-                            lista_avioes.remove(id);
-                            dtm.removeUsuario(i);
+                                var id = Integer.parseInt(dtm.getValueAt(i, 1).toString());
+                                pnlRadar.remove(lista_avioes.get(id).getLabel());
+                                lista_avioes.remove(id);
+                                dtm.removeUsuario(i);
 
 
+                            }
                         }
+                        pnlRadar.updateUI();
+                        tabelaDG.updateUI();
                     }
-                    pnlRadar.updateUI();
-                    tabelaDG.updateUI();
                 }
             }
         });
