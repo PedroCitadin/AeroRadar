@@ -100,7 +100,7 @@ public class Aeronave {
         this.raio = (float) Math.sqrt((this.x*this.x)+(this.y*this.y));
         var coefA = this.y/this.x;
 
-        this.angulo = (float) Math.toDegrees(Math.atan(coefA));
+            this.angulo = (float) Math.toDegrees(Math.atan(coefA));
 
     }
     public static List<Aeronave> calculaBase(Collection<Aeronave> lista, float distancia){
@@ -190,11 +190,15 @@ public class Aeronave {
 
     }
     public static void rotacionar(Aeronave a, int x, int y, float angulo){
-       var angulo_tot = a.getAngulo()+angulo;
+        var angulo_tot = 0.0;
 
-       var x_final = a.getRaio()*Math.cos(Math.toRadians(angulo_tot));
-       var y_final = a.getRaio()*Math.sin(Math.toRadians(angulo_tot));
-
+        angulo_tot = a.getAngulo()+angulo;
+       var xr = a.getX()-x;
+       var yr = a.getY()-y;
+       var x_final = xr*Math.cos(Math.toRadians(angulo))- yr*Math.sin(Math.toRadians(angulo));
+       var y_final = yr*Math.cos(Math.toRadians(angulo))+ xr*Math.sin(Math.toRadians(angulo));
+        x_final+=x;
+        y_final+=y;
         a.alteraPosicao((int) x_final,(int) y_final);
 
     }
