@@ -207,7 +207,7 @@ public class Aeronave {
         float yf= y;
         var novoX = a.getX()*(xf/100);
         var novoY =  a.getY()*(yf/100);
-
+        
         a.alteraPosicao((int) novoX, (int) novoY);
 
     }
@@ -223,9 +223,30 @@ public class Aeronave {
                             mapAux.put(a1.getId()+"-"+a2.getId(), calculaDist(a1, a2));
                             HashMap<String, Float> pontos = Aeronave.calculaPontoEncontro(a1, a2);
                             if (pontos.containsKey("IMPOSSIVEL")){
-
+                                listaproximos.add("Colisão impossivel entre os aviões "+a1.getId()+" e "+a2.getId())   ;
                             }else if(pontos.containsKey("TODOS")){
+                                if (a1.getVelocidade()==a2.getVelocidade()){
+                                    listaproximos.add("Colisão impossivel entre os aviões "+a1.getId()+" e "+a2.getId())   ;
+                                }else{
+                                   if (Aeronave.maisRapidoFrente(a1, a2)){
+                                       listaproximos.add("Colisão impossivel entre os aviões "+a1.getId()+" e "+a2.getId())   ;
+                                   }else{
+                                       float v1, v2;
+                                       if (a1.getVelocidade()>a2.getVelocidade()){
+                                           v1 = a1.getVelocidade();
+                                           v2 = a2.getVelocidade();
+                                       }else{
+                                           v1 = a2.getVelocidade();
+                                           v2 = a1.getVelocidade();
+                                       }
 
+                                       var distancia = Aeronave.calculaDist(a1, a2);
+                                       var tempoColi = ((distancia*1000)/(v1-v2));
+                                       if (tempoColi<=tempo){
+                                           listaproximos.add("Colisão entre os aviões "+a1.getId()+" e "+a2.getId()+" em "+tempoColi+" segundos");
+                                       }
+                                   }
+                                }
                             }else{
                                 var distanciaA1 = (Aeronave.calculaDistPonto(a1, pontos.get("X"), pontos.get("Y")));
 
@@ -289,6 +310,104 @@ public class Aeronave {
 
         return x;
     }
+    public static boolean maisRapidoFrente(Aeronave a1, Aeronave a2){
+        var direcao = a1.getDirecao();
 
+        if (direcao==0){
+               if (a1.getX()>a2.getX()){
+                   if (a1.getVelocidade()>a2.getVelocidade()){
+                       return true;
+                   }
+               }else{
+                   if (a2.getVelocidade()>a1.getVelocidade()){
+                       return true;
+                   }
+               }
+        }else if(direcao>0&&direcao<90){
+            if (a1.getX()>a2.getX()){
+                if (a1.getVelocidade()>a2.getVelocidade()){
+                    return true;
+                }
+            }else{
+                if (a2.getVelocidade()>a1.getVelocidade()){
+                    return true;
+                }
+            }
+        }else if(direcao==90){
+            if (a1.getY()>a2.getY()){
+                if (a1.getVelocidade()>a2.getVelocidade()){
+                    return true;
+                }
+            }else{
+                if (a2.getVelocidade()>a1.getVelocidade()){
+                    return true;
+                }
+            }
+        }else if(direcao>90&&direcao<180){
+            if (a1.getX()<a2.getX()){
+                if (a1.getVelocidade()>a2.getVelocidade()){
+                    return true;
+                }
+            }else{
+                if (a2.getVelocidade()>a1.getVelocidade()){
+                    return true;
+                }
+            }
+        }else if(direcao==180) {
+            if (a1.getX()<a2.getX()){
+                if (a1.getVelocidade()>a2.getVelocidade()){
+                    return true;
+                }
+            }else{
+                if (a2.getVelocidade()>a1.getVelocidade()){
+                    return true;
+                }
+            }
+        }else if(direcao>180&&direcao<270){
+            if (a1.getX()<a2.getX()){
+                if (a1.getVelocidade()>a2.getVelocidade()){
+                    return true;
+                }
+            }else{
+                if (a2.getVelocidade()>a1.getVelocidade()){
+                    return true;
+                }
+            }
+        }else if(direcao==270){
+            if (a1.getY()<a2.getY()){
+                if (a1.getVelocidade()>a2.getVelocidade()){
+                    return true;
+                }
+            }else{
+                if (a2.getVelocidade()>a1.getVelocidade()){
+                    return true;
+                }
+            }
+        }else if(direcao>270&&direcao<360){
+            if (a1.getX()>a2.getX()){
+                if (a1.getVelocidade()>a2.getVelocidade()){
+                    return true;
+                }
+            }else{
+                if (a2.getVelocidade()>a1.getVelocidade()){
+                    return true;
+                }
+            }
+        }else if(direcao==360){
+            if (a1.getX()>a2.getX()){
+                if (a1.getVelocidade()>a2.getVelocidade()){
+                    return true;
+                }
+            }else{
+                if (a2.getVelocidade()>a1.getVelocidade()){
+                    return true;
+                }
+            }
+        }
+
+
+
+        return false;
+    }
 
 }
