@@ -286,7 +286,12 @@ public class TelaPrincipal extends JFrame {
                 if (!txtXentrada.getText().equalsIgnoreCase("") && !txtYentrada.getText().equalsIgnoreCase("")) {
                     Aeronave aviaoOBJ = new Aeronave();
                     JLabel aviao = new JLabel();
+                    try{
+
                     aviao.setLocation(ConversorCoordenadas.converteX(Integer.parseInt(txtXentrada.getText())), ConversorCoordenadas.converteY(Integer.parseInt(txtYentrada.getText())));
+                }catch (Exception exception){
+                    System.err.println(exception);
+                }
                     aviao.setVisible(true);
 
                     aviao.setIcon(ImagemRoda.giraAviao(Integer.parseInt(txtDirecaoentrada.getText())));
@@ -298,15 +303,25 @@ public class TelaPrincipal extends JFrame {
                     aviaoOBJ.setLabel(aviao);
                     aviaoOBJ.setId(geraId());
                     aviaoOBJ.converteCartesianoPolar();
-                    lista_avioes.put(aviaoOBJ.getId(), aviaoOBJ);
-                    dtm.addAeronave(aviaoOBJ);
-                    pnlRadar.add(aviao);
+                    if (!Aeronave.doisNaMesmaPosicao(aviaoOBJ, lista_avioes.values())){
+                        lista_avioes.put(aviaoOBJ.getId(), aviaoOBJ);
+                        dtm.addAeronave(aviaoOBJ);
+                        pnlRadar.add(aviao);
 
-                    pnlRadar.updateUI();
+                        pnlRadar.updateUI();
+                    }else{
+                        JOptionPane.showMessageDialog(null, "É impossivel inserir dois aviões na mesma posição");
+                    }
                 } else if (!txtRaioentrada.getText().equalsIgnoreCase("") && !txtAnguloentrada.getText().equalsIgnoreCase("")) {
                     JLabel aviao = new JLabel();
                     Aeronave aviaoOBJ = new Aeronave();
+                    try{
+
+
                     aviao.setLocation(ConversorCoordenadas.polarX(Integer.parseInt(txtRaioentrada.getText()), Integer.parseInt(txtAnguloentrada.getText())), ConversorCoordenadas.polarY(Integer.parseInt(txtRaioentrada.getText()), Integer.parseInt(txtAnguloentrada.getText())));
+                    }catch (Exception exception){
+                        System.err.println(exception);
+                    }
                     aviao.setVisible(true);
 
                     aviao.setIcon(ImagemRoda.giraAviao(Integer.parseInt(txtDirecaoentrada.getText())));
@@ -318,10 +333,15 @@ public class TelaPrincipal extends JFrame {
                     aviaoOBJ.setLabel(aviao);
                     aviaoOBJ.setId(geraId());
                     aviaoOBJ.convertePolarCartesiano();
-                    lista_avioes.put(aviaoOBJ.getId(), aviaoOBJ);
-                    dtm.addAeronave(aviaoOBJ);
-                    pnlRadar.add(aviao);
-                    pnlRadar.updateUI();
+                    if (!Aeronave.doisNaMesmaPosicao(aviaoOBJ, lista_avioes.values())){
+                        lista_avioes.put(aviaoOBJ.getId(), aviaoOBJ);
+                        dtm.addAeronave(aviaoOBJ);
+                        pnlRadar.add(aviao);
+
+                        pnlRadar.updateUI();
+                    }else{
+                        JOptionPane.showMessageDialog(null, "É impossivel inserir dois aviões na mesma posição");
+                    }
                 } else {
                     System.out.println("erro");
                 }

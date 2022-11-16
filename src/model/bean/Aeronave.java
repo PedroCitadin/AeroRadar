@@ -207,7 +207,7 @@ public class Aeronave {
         float yf= y;
         var novoX = a.getX()*(xf/100);
         var novoY =  a.getY()*(yf/100);
-        
+
         a.alteraPosicao((int) novoX, (int) novoY);
 
     }
@@ -410,4 +410,14 @@ public class Aeronave {
         return false;
     }
 
+
+    public static boolean doisNaMesmaPosicao(Aeronave a1, Collection<Aeronave> lista){
+
+        for (Aeronave a : lista){
+            if (a.getX()==a1.getX()&&a.getY()==a1.getY()){
+                return true;
+            }
+        }
+        return false;
+    }
 }
