@@ -176,20 +176,20 @@ public class Aeronave {
 
         return (float) Math.sqrt((dx*dx)+(dy*dy));
     }
-    public void alteraPosicao(int x, int y){
+    public void alteraPosicao(float x, float y){
         this.x = x;
         this.y = y;
         this.converteCartesianoPolar();
         this.label.setBounds(ConversorCoordenadas.converteX(x), ConversorCoordenadas.converteY(y), this.label.getWidth(), this.label.getHeight());
     }
-    public static void translandar(Aeronave a, int x, int y){
-        int novoX = (int) (a.x+x);
-        int novoY = (int) (a.y+y);
+    public static void translandar(Aeronave a, float x, float y){
+        var novoX = (float) (a.x+x);
+        var novoY = (float) (a.y+y);
         a.alteraPosicao(novoX, novoY);
 
 
     }
-    public static void rotacionar(Aeronave a, int x, int y, float angulo){
+    public static void rotacionar(Aeronave a, float x, float y, float angulo){
         var angulo_tot = 0.0;
 
         angulo_tot = a.getAngulo()+angulo;
@@ -199,16 +199,16 @@ public class Aeronave {
        var y_final = yr*Math.cos(Math.toRadians(angulo))+ xr*Math.sin(Math.toRadians(angulo));
         x_final+=x;
         y_final+=y;
-        a.alteraPosicao((int) x_final,(int) y_final);
+        a.alteraPosicao((float) x_final,(float) y_final);
 
     }
-    public static void escalonar(Aeronave a, int x, int y){
+    public static void escalonar(Aeronave a, float x, float y){
         float xf = x;
         float yf= y;
         var novoX = a.getX()*(xf/100);
         var novoY =  a.getY()*(yf/100);
 
-        a.alteraPosicao((int) novoX, (int) novoY);
+        a.alteraPosicao((float) novoX, (float) novoY);
 
     }
 
@@ -231,34 +231,39 @@ public class Aeronave {
                                    if (Aeronave.maisRapidoFrente(a1, a2)){
                                        listaproximos.add("Colisão impossivel entre os aviões "+a1.getId()+" e "+a2.getId())   ;
                                    }else{
-                                       float v1, v2;
-                                       if (a1.getVelocidade()>a2.getVelocidade()){
-                                           v1 = a1.getVelocidade();
-                                           v2 = a2.getVelocidade();
-                                       }else{
-                                           v1 = a2.getVelocidade();
-                                           v2 = a1.getVelocidade();
-                                       }
+                                       if (Aeronave.indoProPonto(a1, pontos.get("X"), pontos.get("Y"))&&Aeronave.indoProPonto(a2, pontos.get("X"), pontos.get("Y"))) {
 
-                                       var distancia = Aeronave.calculaDist(a1, a2);
-                                       var tempoColi = ((distancia*1000)/(v1-v2));
-                                       if (tempoColi<=tempo){
-                                           listaproximos.add("Colisão entre os aviões "+a1.getId()+" e "+a2.getId()+" em "+tempoColi+" segundos");
+                                           float v1, v2;
+                                           if (a1.getVelocidade() > a2.getVelocidade()) {
+                                               v1 = a1.getVelocidade();
+                                               v2 = a2.getVelocidade();
+                                           } else {
+                                               v1 = a2.getVelocidade();
+                                               v2 = a1.getVelocidade();
+                                           }
+
+                                           var distancia = Aeronave.calculaDist(a1, a2);
+                                           var tempoColi = ((distancia * 1000) / (v1 - v2));
+                                           if (tempoColi <= tempo) {
+                                               listaproximos.add("Colisão entre os aviões " + a1.getId() + " e " + a2.getId() + " em " + tempoColi + " segundos");
+                                           }
                                        }
                                    }
                                 }
                             }else{
-                                var distanciaA1 = (Aeronave.calculaDistPonto(a1, pontos.get("X"), pontos.get("Y")));
+                                if (Aeronave.indoProPonto(a1, pontos.get("X"), pontos.get("Y"))&&Aeronave.indoProPonto(a2, pontos.get("X"), pontos.get("Y"))){
+                                    var distanciaA1 = (Aeronave.calculaDistPonto(a1, pontos.get("X"), pontos.get("Y")));
 
-                                var distanciaA2 = (Aeronave.calculaDistPonto(a2, pontos.get("X"), pontos.get("Y")));
+                                    var distanciaA2 = (Aeronave.calculaDistPonto(a2, pontos.get("X"), pontos.get("Y")));
 
-                                var tempoA1 = distanciaA1/a1.getVelocidade();
-                                var tempoA2 = distanciaA2/a2.getVelocidade();
-                                var tempofinal = Math.abs(tempoA1 - tempoA2)*3600;
-                               if (tempofinal<=tempo){
-                                   listaproximos.add("Colisão entre os aviões "+a1.getId()+" e "+a2.getId()+" em "+tempofinal+" segundos");
-                               }
-                            }
+                                    var tempoA1 = distanciaA1/a1.getVelocidade();
+                                    var tempoA2 = distanciaA2/a2.getVelocidade();
+                                    var tempofinal = Math.abs(tempoA1 - tempoA2)*3600;
+                                    if (tempofinal<=tempo){
+                                        listaproximos.add("Colisão entre os aviões "+a1.getId()+" e "+a2.getId()+" em "+tempofinal+" segundos");
+                                    }
+                                }
+                                }
                         }
                     }else{
                         if (!mapAux.containsKey(a2.getId()+"-"+a1.getId())){
@@ -418,6 +423,19 @@ public class Aeronave {
                 return true;
             }
         }
+        return false;
+    }
+
+    public static boolean indoProPonto(Aeronave a1, float x, float y){
+        var rx = x-a1.getX();
+        var ry = y-a1.getY();
+        var m = ry/rx;
+        var angulo  =Math.toDegrees(Math.atan(m));
+        if (a1.getDirecao()==angulo){
+            return true;
+        }
+
+
         return false;
     }
 }

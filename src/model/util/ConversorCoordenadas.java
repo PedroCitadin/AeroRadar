@@ -8,24 +8,24 @@ public class ConversorCoordenadas {
 
 
 
-    public static int converteX(int x){
+    public static int converteX(float x){
 
-        return x+200-(25/2);
+        return (int) x+200-(25/2);
     }
-    public static int converteY(int y){
+    public static int converteY(float y){
 
-        return (y*(-1))+200-(25/2);
+        return (int) (y*(-1))+200-(25/2);
     }
 
 
-    public static int polarX(int raio, int angulo){
-        int x = (int) (Math.cos(Math.toRadians(angulo))*raio);
+    public static int polarX(float raio, float angulo){
+        float x = (float) (Math.cos(Math.toRadians(angulo))*raio);
 
         return converteX(x);
     }
 
-    public static int polarY(int raio, int angulo){
-        int y = (int) (Math.sin(Math.toRadians(angulo))*raio);
+    public static int polarY(float raio, float angulo){
+        float y = (float) (Math.sin(Math.toRadians(angulo))*raio);
 
         return converteY(y);
     }
